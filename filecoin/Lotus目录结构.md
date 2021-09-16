@@ -1,4 +1,5 @@
 api目录
+
 为Lotus命令提供后台服务，多数命令都需要与后台服务进行通信，这些命令通常会涉及到链上数据。本目录抽象了节点定义，定义了若干go interface，如 Common（定义节点通用功能）、FullNode （定义一个全节点的行为，继承自Common）、StorageMiner（存储矿工，也从Common继承）和相关的函数。
 
 对应于上面几种主要接口，也提供了几个struct，分别为CommonStruct，FullNodeStruct，StorageMinerStruct作为实现，这些实现使用了代理模式，只是简单地将请求转发给各自的Internal成员，具体的功能函数需要使用者提供，例如获取支付通道列表函数：
@@ -12,9 +13,11 @@ api目录
 
 
 build目录
+
 定义用于构建节点的函数，包括但不限于： 从受信节点获取启动相关参数（位于paramfetch.go），生成内置的创世区块（位于genesis.go）等。 genesis子目录：内置的创世区块数据
 
 cli目录
+
 Lotus命令行工具的实现，依赖于包gopkg.in/urfave/cli.v2，里面的go文件名基本上与Lotus的子命令保持一致。对应于每条子命令及子命令的子命令，都定义了一个Command对象，如相对于Lotus chain 命令：
 
 
