@@ -1,4 +1,5 @@
 api
+
 见名知意，这个目下主要存放 API 相关程序，Lotus 是一个大型的区块链项目，模块之间基本都通过 API 来通信，远程 API 的调用走的是 JSONRPC 调用模式，比如 Miner 上链要调用 Lotus Chain 的 API，Worker 和 Miner 之间通信也是相互调用 API。
 
 本目录抽象了节点定义，定义了若干go interface，如 Common（定义节点通用功能）、FullNode （定义一个全节点的行为，继承自Common）、StorageMiner（存储矿工，也从Common继承）和相关的函数。这里有几个重要的接口：
@@ -20,6 +21,7 @@ return s.Internal.SectorsList(p0)
 切记：每次更改了 API 要记得执行 make gen 重新生成 API 代理文件 proxy_gen.go，否则编译的时候会提示找不到 API 方法。
 
 blockstore
+
 区块存储工具包，包括区块的新增，删除，以及同步相关的 API，这里做了几种实现，有 leveldb 版本，内存（mem.go）版本以及 IPFS 版本的实现。
 
 IPFS 版本实现：
@@ -58,9 +60,11 @@ _, ok := m[k]
 return ok, nil
 }
 build
+
 定义用于构建节点，创建网络相关功能，包括但不限于定义网络相关配置(如 params_main.go)，定义创世节点相关信息(genesis目录)， 以及创世节点的连接信息(bootstrap目录)，复制证明参数下载地址配置等。
 
 chain（二级关注）
+
 顾名思义，就是实现了 Louts 链相关的功能，主要包含了如下子模块：
 
 types: 定义 Louts 链中的各种数据结构。
@@ -80,6 +84,7 @@ actors: 账户体系，定义了各种 actor。
 vm: 智能合约虚拟机，这里实现了actor 的方法调用工具包。
 
 cli（一级关注）
+
 Lotus命令行工具的实现，里面的go文件名基本上与Lotus的子命令保持一致，比如：
 
 state.go: 对应 lotus state 命令
@@ -140,6 +145,7 @@ return nil
 },
 }
 cmd（一级关注）
+
 包括 Lotus 项目所有的命令行项目，Lotus 将系统分为不同的进程模块，为每个模块定义一个项目：
 
 模块名称	模块说明
@@ -166,6 +172,7 @@ make lotus-wallet
 图片
 
 documentation
+
 Lotus的文档目录，Lotus计划提供中英文两种文字的文档，目前已有的文档主要涉及以下方面：
 
 新手指导.
@@ -218,12 +225,14 @@ extern/storage-sealing（一级关注）
 sealing 相关的 API 实现
 
 gen
+
 API 代理对象的生成工具，略过即可。
 
 journal
 journal 日志工具，略过即可。
 
 lib
+
 实现 lotus 项目各模块公用的函数，主要有下面几个模块：
 
 addrutil： 地址解析工具
@@ -239,15 +248,19 @@ sigs： 钱包签名工具包，包括 bls 和 secp256k 两种实现
 **ulimit：**lotus 相关程序运行时的 FD 设置工具，主要用来设置 lotus-miner 程序的最大打开文件数。
 
 lotuspond
+
 Pond 项目目录，Pond 是一个用于管理 Lotus 的UI工具，可用于建立一个独立的本地网络以方便调试。Pond会启动节点，使用指定的拓扑进行连接，启动挖矿，并持续监控节点运行状况。不过我个人觉得这个项目没什么卵用 O(∩_∩)O~。
 
 markets（二级关注）
+
 Filecoin 订单市场相关实现，包括订单的过滤，订单价格，以及存储订单和检索订单的适配器等。
 
 miner（二级关注）
+
 爆块主程序，定义产出区块完整逻辑。
 
 node（一级关注）
+
 定义了 lotus 节点相关的 struct 和 interface 等，各主要子目录如下：
 
 config: 定义节点相关配置结构体
@@ -261,15 +274,19 @@ impl: 节点各种 API 的实现，比如 full.go 实现全节点的相关 API�
 repo: 链上数据在本地的存储仓库，与本地文件系统打交道。
 
 paychmgr
+
 各种支付凭证管理，定义了一些支付通道的 API。
 
 scripts
+
 各种运行脚本，用于部署节点和矿工等，也包括一些用于启动的配置文件。
 
 storage（一级关注）
+
 定义存储矿工逻辑，用于实现"lotus-storage-miner"，时空证明的主程序逻辑也是在这里实现的。
 
 tools
+
 各种打包工具封装，如使用 docker 部署 Lotus 等。
 
 标注 一级关注 的模块是跟任务调度，密封相关的内容，这块的内容通常你最先去触碰并修改的， 通常这些模块你修改的需求最多，同时也是你能发挥的空间最大的地方。
